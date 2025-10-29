@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
+CFLAGS = -g -Wall -Wextra -Iinclude -std=c11
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:src/%.c=build/%.o)
 TARGET = build/main
@@ -17,5 +17,8 @@ build:
 
 clean:
 	rm -rf build
+
+run: $(TARGET)
+	./$(TARGET)
 
 .PHONY: all clean
