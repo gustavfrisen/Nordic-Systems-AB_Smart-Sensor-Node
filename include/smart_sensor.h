@@ -14,11 +14,20 @@ typedef struct smart_sensor_t {
 
 int smart_sensor_init(smart_sensor_t* _smart_sensor);
 int smart_sensor_init_ptr(smart_sensor_t** _smart_sensor);
+
+// Sets the callback function to be called when data is updated
 int smart_sensor_set_on_data_updated(smart_sensor_t* _smart_sensor, void (*_callback)());
 
+// Refreshes the smart sensor data by fetching from the server
 int smart_sensor_refresh(smart_sensor_t* _smart_sensor);
+
+// Reads the device ID
 int smart_sensor_read_device(smart_sensor_t* _smart_sensor, char* _out_device);
+
+// Reads the temperature
 int smart_sensor_read_temperature(smart_sensor_t* _smart_sensor, float* _out_temperature);
+
+// Reads the date
 int smart_sensor_read_date(smart_sensor_t* _smart_sensor, char* _out_date);
 
 void smart_sensor_dispose(smart_sensor_t* _smart_sensor);

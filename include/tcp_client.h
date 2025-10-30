@@ -20,9 +20,16 @@ typedef struct tcp_client_t {
 int tcp_client_init(tcp_client_t* _client);
 int tcp_client_init_ptr(tcp_client_t** _client);
 
+// Connects to the specified host and port
 int tcp_client_connect(tcp_client_t* _client, const char* _host, const char* _port);
+
+// Writes data to the TCP connection
 int tcp_client_write(tcp_client_t* _client, const uint8_t* _buffer, int _len);
+
+// Reads data from the TCP connection
 int tcp_client_read(tcp_client_t* _client, uint8_t* _buffer, int _len);
+
+// Disconnects the TCP connection
 void tcp_client_disconnect(tcp_client_t* _client);
 
 void tcp_client_dispose(tcp_client_t* _client);
