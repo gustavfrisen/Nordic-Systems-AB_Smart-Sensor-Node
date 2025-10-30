@@ -1,6 +1,7 @@
 #ifndef _SMART_SENSOR_H
 #define _SMART_SENSOR_H
 
+#include <string.h>
 #include "tcp_client.h"
 #include "http.h"
 

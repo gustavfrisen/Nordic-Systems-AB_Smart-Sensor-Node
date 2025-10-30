@@ -1,5 +1,6 @@
 #include "smart_sensor.h"
-#include <string.h>
+#include "utils.h"
+#include "jansson.h"
 
 int smart_sensor_init(smart_sensor_t* _smart_sensor)
 {
@@ -112,6 +113,22 @@ int smart_sensor_refresh(smart_sensor_t* _smart_sensor)
     _smart_sensor->temperature = strtof(temperature, NULL);
     _smart_sensor->date = strdup(date);
 
+    create_folder("logs");
+
+    json_t* log_json = json_object();
+    if (!log_json) {
+        tcp_client_dispose(&client);
+        return -1;
+    } else {
+        json_object_set_new(log_json, "device", json_string(_smart_sensor->device));
+        json_object_set_new(log_json, "temperature", json_real(_smart_sensor->temperature));
+        json_object_set_new(log_json, "date", json_string(_smart_sensor->date));
+
+        json_dump_file(log_json, "logs/smart_sensor_log.json", JSON_INDENT(4));
+        json_decref(log_json);
+    }
+
+    free(http_request);
     tcp_client_dispose(&client);
 
     _smart_sensor->on_data_updated_cb();
