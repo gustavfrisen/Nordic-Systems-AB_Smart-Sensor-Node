@@ -1,12 +1,24 @@
 #include "tcp_client.h"
 
-int tcp_client_init(tcp_client *_client)
+int tcp_client_init(tcp_client_t* _client)
 {
     _client->fd = -1;
     return 0;
 }
 
-int tcp_client_connect(tcp_client *_client, const char *_host, const char *_port)
+int tcp_client_init_ptr(tcp_client_t** _client)
+{
+    if (!_client) return -1;
+
+    *_client = malloc(sizeof(tcp_client_t));
+    if (!*_client) return -1;
+
+    tcp_client_init(*_client);
+
+    return 0;
+}
+
+int tcp_client_connect(tcp_client_t* _client, const char* _host, const char* _port)
 {
     struct addrinfo hints = {0}, *res = NULL;
     hints.ai_family = AF_UNSPEC;
@@ -34,23 +46,34 @@ int tcp_client_connect(tcp_client *_client, const char *_host, const char *_port
     return 0;
 }
 
-int tcp_client_write(tcp_client *_client, const uint8_t *_buffer, int _len)
+int tcp_client_write(tcp_client_t* _client, const uint8_t* _buffer, int _len)
 {
     return send(_client->fd, _buffer, _len, MSG_NOSIGNAL);
 }
 
-int tcp_client_read(tcp_client *_client, uint8_t *_buffer, int _len)
+int tcp_client_read(tcp_client_t* _client, uint8_t* _buffer, int _len)
 {
     return recv(_client->fd, _buffer, _len, 0);
 }
 
-void tcp_client_disconnect(tcp_client *_client)
+void tcp_client_disconnect(tcp_client_t* _client)
 {
     if (_client->fd >= 0) close(_client->fd);
     _client->fd = -1;
 }
 
-void tcp_client_dispose(tcp_client *_client)
+void tcp_client_dispose(tcp_client_t* _client)
 {
+    if (!_client) return;
+
     tcp_client_disconnect(_client);
+}
+
+void tcp_client_dispose_ptr(tcp_client_t** _client)
+{
+    if (!_client || !*_client) return;
+
+    tcp_client_dispose(*_client);
+    free(*_client);
+    *_client = NULL;
 }
